@@ -4,7 +4,7 @@
  * Written by Matthew Tole <pebble@matthewtole.com>
  * Started 4th July 2013
  *
- * Developed for Rush Hamilton at Pine Point School
+ * Developed for Rush Hambleton at Pine Point School
  * Original proposal document: http://dft.ba/-pinepointproposal
  *
  * GitHub Repository: https://github.com/matthewtole/pebble-pinepoint/
