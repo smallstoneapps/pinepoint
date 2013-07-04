@@ -70,11 +70,6 @@ PblTm get_current_time() {
   PblTm current_time;
   get_time(&current_time);
 
-  // TESTING CODE
-  current_time.tm_hour += 13;
-  current_time.tm_min -= 22;
-  // END TESTING CODE
-
   return current_time;
 
 }
@@ -147,7 +142,7 @@ void do_vibrate(int minutes) {
     break;
 
     case 2: {
-      uint32_t const segments[] = { VIBE_TINY, VIBE_PAUSE, VIBE_TINY };
+      uint32_t const segments[] = { VIBE_TINY, VIBE_TINY, VIBE_TINY };
       vibrate_segments(segments, ARRAY_LENGTH(segments));
     }
     break;
