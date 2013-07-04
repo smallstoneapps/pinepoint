@@ -41,7 +41,6 @@ PBL_APP_INFO(MY_UUID, "Pine Point", "Matthew Tole", 1, 0,  DEFAULT_MENU_ICON, AP
 #define VIBE_TINY 300
 #define VIBE_HUGE 5000
 #define VIBE_PAUSE 500
-#define VIBE_PAUSE_TINY 300
 
 #define CLASS_DURATION 40
 
@@ -73,6 +72,7 @@ PblTm get_current_time() {
 
   // TESTING CODE
   current_time.tm_hour += 13;
+  current_time.tm_min -= 22;
   // END TESTING CODE
 
   return current_time;
@@ -105,11 +105,11 @@ int get_minutes_left(PblTm current_time) {
  * Perform a given vibration sequence.
  * @param Array of segments lengths.
  */
-void vibrate_segments(uint32_t const segments[]) {
+void vibrate_segments(uint32_t const segments[], int segment_count) {
 
   VibePattern pattern = {
     .durations = segments,
-    .num_segments = ARRAY_LENGTH(segments),
+    .num_segments = segment_count,
   };
   vibes_enqueue_custom_pattern(pattern);
 
@@ -124,37 +124,37 @@ void do_vibrate(int minutes) {
   switch (minutes) {
     case 20: {
       uint32_t const segments[] = { VIBE_LONG, VIBE_PAUSE, VIBE_LONG };
-      vibrate_segments(segments);
+      vibrate_segments(segments, ARRAY_LENGTH(segments));
     }
     break;
 
     case 15: {
       uint32_t const segments[] = { VIBE_LONG, VIBE_PAUSE, VIBE_SHORT };
-      vibrate_segments(segments);
+      vibrate_segments(segments, ARRAY_LENGTH(segments));
     }
     break;
 
     case 10: {
       uint32_t const segments[] = { VIBE_LONG };
-      vibrate_segments(segments);
+      vibrate_segments(segments, ARRAY_LENGTH(segments));
     }
     break;
 
     case 5: {
       uint32_t const segments[] = { VIBE_SHORT };
-      vibrate_segments(segments);
+      vibrate_segments(segments, ARRAY_LENGTH(segments));
     }
     break;
 
     case 2: {
       uint32_t const segments[] = { VIBE_TINY, VIBE_PAUSE, VIBE_TINY };
-      vibrate_segments(segments);
+      vibrate_segments(segments, ARRAY_LENGTH(segments));
     }
     break;
 
     case 0: {
       uint32_t const segments[] = { VIBE_HUGE };
-      vibrate_segments(segments);
+      vibrate_segments(segments, ARRAY_LENGTH(segments));
     }
     break;
 
@@ -229,7 +229,9 @@ void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
   PblTm the_time   = get_current_time();
   int minutes_left = get_minutes_left(the_time);
 
-  do_vibrate(minutes_left);
+  if (the_time.tm_sec == 0) {
+    do_vibrate(minutes_left);
+  }
   draw(the_time);
 
 }
