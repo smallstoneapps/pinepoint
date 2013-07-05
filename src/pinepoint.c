@@ -16,7 +16,7 @@
 
 #define MY_UUID { 0x66, 0x78, 0xBA, 0xA6, 0x46, 0x8D, 0x45, 0x23, 0x98, 0x58, 0x29, 0x2F, 0xAE, 0x52, 0x72, 0x40 }
 
-PBL_APP_INFO(MY_UUID, "Pine Point", "Matthew Tole", 1, 0,  DEFAULT_MENU_ICON, APP_INFO_WATCH_FACE);
+PBL_APP_INFO(MY_UUID, "Pine Point", "Matthew Tole", 1, 1,  DEFAULT_MENU_ICON, APP_INFO_WATCH_FACE);
 
 // Commented out because inverted colours is gross.
 // #define INVERT_COLORS
@@ -205,7 +205,7 @@ void draw(PblTm current_time) {
 
   // Format the current time into a nice string and display.
   static char time_text[] = "00:00 AM";
-  string_format_time(time_text, sizeof(time_text), "%H:%M %p", &current_time);
+  string_format_time(time_text, sizeof(time_text), "%l:%M %p", &current_time);
   text_layer_set_text(&g_layer_time, time_text);
 
   // Mark the grid layer as dirty so it redraws.
