@@ -16,7 +16,7 @@
 
 #define MY_UUID { 0x66, 0x78, 0xBA, 0xA6, 0x46, 0x8D, 0x45, 0x23, 0x98, 0x58, 0x29, 0x2F, 0xAE, 0x52, 0x72, 0x40 }
 
-PBL_APP_INFO(MY_UUID, "Pine Point", "Matthew Tole", 1, 1,  DEFAULT_MENU_ICON, APP_INFO_WATCH_FACE);
+PBL_APP_INFO(MY_UUID, "Pine Point", "Matthew Tole", 1, 2,  DEFAULT_MENU_ICON, APP_INFO_WATCH_FACE);
 
 // Commented out because inverted colours is gross.
 // #define INVERT_COLORS
@@ -36,10 +36,10 @@ PBL_APP_INFO(MY_UUID, "Pine Point", "Matthew Tole", 1, 1,  DEFAULT_MENU_ICON, AP
 #define ROW_COUNT 8
 #define CORNER_RADIUS 2
 
-#define VIBE_LONG 3000
-#define VIBE_SHORT 1000
+#define VIBE_LONG 1500
+#define VIBE_SHORT 500
 #define VIBE_TINY 300
-#define VIBE_HUGE 5000
+#define VIBE_HUGE 3000
 #define VIBE_PAUSE 500
 
 #define CLASS_DURATION 40
