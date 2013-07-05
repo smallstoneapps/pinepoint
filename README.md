@@ -11,4 +11,5 @@ At specified times the watch will vibrate to indicate the number of minutes rema
 [1]: http://getpebble.com
 [2]: http://pinepoint.org
 
-![Photo of the app](http://res.cloudinary.com/matthewtole-com/image/upload/c_scale,h_300/v1373019369/pebble-pinepoint-1.0.jpg)
+![Render of the app](http://res.cloudinary.com/matthewtole-com/image/upload/c_pad,e_shadow,g_east,h_300,w_190/v1373027237/pebble-pinepoint-render-1.0.png)
+![Photo of the app](http://res.cloudinary.com/matthewtole-com/image/upload/c_scale,h_316/v1373019369/pebble-pinepoint-1.0.jpg)
