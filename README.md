@@ -1,8 +1,12 @@
 ### Pine Point Pebble Watchface
 
-This is a custom watchface for the [Pebble Smartwatch][1]. This watchface was comissioned by *Rush Hambleton* for use whist teaching at [Pine Point School][2].
+This is a custom watchface for the [Pebble Smartwatch][1].
 
-The original proposal docment for the watchface can be found at http://dft.ba/-pinepointproposal.
+The watchface was comissioned by *Rush Hambleton* for use whist teaching at [Pine Point School][2].
+
+The original proposal docment for the watchface can be found at http://dft.ba/-pinepointproposal. 
+
+After testing, the vibration periods were reduced as specified [in this image][4].
 
 The watchface displays the number of minutes left before the end of each school period, using an easy to read grid of 40 blocks, each representing one minute.
 
@@ -24,3 +28,4 @@ You can install this watchface by clicking [this link][3] on the Android or iOS 
 [2]: http://pinepoint.org
 [3]: http://cdpn.io/wHrkL
 [3]: http://matthewtole.com/pebble/pinepoint.pbw
+[4]: http://res.cloudinary.com/matthewtole-com/image/upload/v1373304036/pebble-pinepoint-proposal-change.png
