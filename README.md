@@ -1,6 +1,6 @@
 ### Pine Point Pebble Watchface
 
-This is a custom watchface for the [Pebble Smartwatch][1]. This watchface was comissioned by *Rush Hambleton* for use whist teaching at *[Pine Point School][2]*.
+This is a custom watchface for the [Pebble Smartwatch][1]. This watchface was comissioned by *Rush Hambleton* for use whist teaching at [Pine Point School][2].
 
 The original proposal docment for the watchface can be found at http://dft.ba/-pinepointproposal.
 
