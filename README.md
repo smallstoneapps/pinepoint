@@ -6,7 +6,7 @@ The watchface was comissioned by *Rush Hambleton* for use whist teaching at [Pin
 
 The original proposal docment for the watchface can be found at http://dft.ba/-pinepointproposal. 
 
-After testing, the vibration periods were reduced as specified [in this image][4].
+After testing, the vibration periods were reduced as specified [in this image][5].
 
 The watchface displays the number of minutes left before the end of each school period, using an easy to read grid of 40 blocks, each representing one minute.
 
@@ -14,7 +14,7 @@ At specified times the watch will vibrate to indicate the number of minutes rema
 
 #### Install
 
-You can install this watchface by clicking [this link][3] on the Android or iOS device that you have paired to your Pebble watch.
+You can install this watchface by clicking [this link][4] on the Android or iOS device that you have paired to your Pebble watch.
 
 #### Pictures
 
@@ -27,5 +27,5 @@ You can install this watchface by clicking [this link][3] on the Android or iOS 
 [1]: http://getpebble.com
 [2]: http://pinepoint.org
 [3]: http://cdpn.io/wHrkL
-[3]: http://matthewtole.com/pebble/pinepoint.pbw
-[4]: http://res.cloudinary.com/matthewtole-com/image/upload/v1373304036/pebble-pinepoint-proposal-change.png
+[4]: http://matthewtole.com/pebble/pinepoint.pbw
+[5]: http://res.cloudinary.com/matthewtole-com/image/upload/v1373304036/pebble-pinepoint-proposal-change.png
