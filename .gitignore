@@ -1,20 +1,11 @@
-
-# Ignore ignore files
-.hgignore
-.gitignore
-
-# Ignore waf build tool generated files
-.waf*
+# Build folder
 build
-.lock-waf*
 
-# Ignore linked files/directories
-waf
-wscript
-tools
-include
-lib
-pebble_app.ld
+# Waf lock files
+.lock*
 
-# Ignore other generated files
-serial_dump.txt
+# Generated Javascript
+pebble/src/js
+
+# OS guff
+.DS_Store

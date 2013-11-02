@@ -1,0 +1,15 @@
+{
+  "uuid": "6678baa6-468d-4523-9858-292fae527240",
+  "shortName": "Pine Point",
+  "longName": "Pine Point",
+  "companyName": "Matthew Tole",
+  "versionCode": 2,
+  "versionLabel": "2.0.0",
+  "watchapp": {
+    "watchface": true
+  },
+  "appKeys": {},
+  "resources": {
+    "media": []
+  }
+}

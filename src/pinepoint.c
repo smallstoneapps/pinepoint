@@ -10,22 +10,21 @@
  * GitHub Repository: https://github.com/matthewtole/pebble-pinepoint/
 */
 
-#include "pebble_os.h"
-#include "pebble_app.h"
-#include "pebble_fonts.h"
+#include <pebble_os.h>
+#include <pebble_app.h>
+#include <pebble_fonts.h>
 
-#define MY_UUID { 0x66, 0x78, 0xBA, 0xA6, 0x46, 0x8D, 0x45, 0x23, 0x98, 0x58, 0x29, 0x2F, 0xAE, 0x52, 0x72, 0x40 }
-
-PBL_APP_INFO(MY_UUID, "Pine Point", "Matthew Tole", 1, 2,  DEFAULT_MENU_ICON, APP_INFO_WATCH_FACE);
+#include "pebble-assist.h"
+#include "clock-layer.h"
 
 // Commented out because inverted colours is gross.
-// #define INVERT_COLORS
-#ifndef INVERT_COLORS
-#define COLOR_FOREGROUND GColorBlack
-#define COLOR_BACKGROUND GColorWhite
-#else
+#define INVERT_COLORS false
+#if INVERT_COLORS
 #define COLOR_FOREGROUND GColorWhite
 #define COLOR_BACKGROUND GColorBlack
+#else
+#define COLOR_FOREGROUND GColorBlack
+#define COLOR_BACKGROUND GColorWhite
 #endif
 
 #define WIDTH 24
@@ -44,6 +43,14 @@ PBL_APP_INFO(MY_UUID, "Pine Point", "Matthew Tole", 1, 2,  DEFAULT_MENU_ICON, AP
 
 #define CLASS_DURATION 40
 
+static struct tm get_current_time();
+static int get_minutes_left(struct tm* current_time);
+static void vibrate_segments(uint32_t const segments[], int segment_count);
+static void do_vibrate(int minutes);
+static void grid_layer_update_callback(Layer* me, GContext* ctx);
+static void handle_init(void);
+static void handle_deinit(void);
+
 const int CLASS_ENDINGS[] = {
   572, // 09:32
   623, // 10:23
@@ -56,22 +63,23 @@ const int CLASS_ENDINGS[] = {
 
 const int CLASS_COUNT = ARRAY_LENGTH(CLASS_ENDINGS);
 
-Window    g_window;
-TextLayer g_layer_time;
-Layer     g_layer_grid;
+static Window* window;
+static ClockLayer* layer_time;
+static Layer* layer_grid;
 
 /**
- * Get the "current" time.
- * Returns the current time, although the time can be manipulated for testing.
- * @return The current time, or a fake time.
+ * Pebble app entry point
  */
-PblTm get_current_time() {
+int main(void) {
+  handle_init();
+  app_event_loop();
+  handle_deinit();
+}
 
-  PblTm current_time;
-  get_time(&current_time);
-
-  return current_time;
-
+static struct tm get_current_time() {
+  time_t tmp = time(NULL);
+  struct tm* now = localtime(&tmp);
+  return *now;
 }
 
 /**
@@ -79,9 +87,9 @@ PblTm get_current_time() {
  * @param The current time
  * @return Minutes left before end of the class
  */
-int get_minutes_left(PblTm current_time) {
+int get_minutes_left(struct tm* current_time) {
 
-  int minutes_since_midnight = (current_time.tm_hour * 60) + current_time.tm_min;
+  int minutes_since_midnight = (current_time->tm_hour * 60) + current_time->tm_min;
 
   // Go through the class times and find the first one that hasn't finished
   // already, and return the number of minutes until the end of that class.
@@ -165,13 +173,12 @@ void do_vibrate(int minutes) {
  * @param Pointer to the current context.
  */
 void grid_layer_update_callback(Layer* me, GContext* ctx) {
+  graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
 
-   graphics_context_set_stroke_color(ctx, COLOR_FOREGROUND);
+  struct tm the_time = get_current_time();
+  int minutes_left = get_minutes_left(&the_time);
 
-   PblTm the_time = get_current_time();
-   int minutes_left = get_minutes_left(the_time);
-
-   for (int x = 0; x < COLUMN_COUNT; x += 1) {
+  for (int x = 0; x < COLUMN_COUNT; x += 1) {
 
     for (int y = 0; y < ROW_COUNT; y += 1) {
 
@@ -192,24 +199,7 @@ void grid_layer_update_callback(Layer* me, GContext* ctx) {
       graphics_fill_rect(ctx, cell, CORNER_RADIUS, GCornersAll);
     }
 
-   }
-
-}
-
-/**
- * Main drawing function
- * Called every minute and whenever the watch app loads.
- * @param The "current" time.
- */
-void draw(PblTm current_time) {
-
-  // Format the current time into a nice string and display.
-  static char time_text[] = "00:00 AM";
-  string_format_time(time_text, sizeof(time_text), "%l:%M %p", &current_time);
-  text_layer_set_text(&g_layer_time, time_text);
-
-  // Mark the grid layer as dirty so it redraws.
-  layer_mark_dirty(&g_layer_grid);
+  }
 
 }
 
@@ -219,16 +209,19 @@ void draw(PblTm current_time) {
  * @param The app context reference.
  * @param Pointer to the Pebble event.
  */
-void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
+void handle_minute_tick(struct tm* tick_time, TimeUnits units_changed) {
 
-  PblTm the_time   = get_current_time();
-  int minutes_left = get_minutes_left(the_time);
+  struct tm the_time   = get_current_time();
+  int minutes_left = get_minutes_left(&the_time);
 
   if (the_time.tm_sec == 0) {
     do_vibrate(minutes_left);
   }
-  draw(the_time);
 
+  // Update the clock layer
+  clock_layer_set_time(layer_time, &the_time);
+  // Mark the grid layer as dirty so it redraws.
+  layer_mark_dirty(layer_grid);
 }
 
 /**
@@ -236,43 +229,34 @@ void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
  * Called whenever the watch app is loaded.
  * @param The app context reference
  */
-void handle_init(AppContextRef ctx) {
+void handle_init() {
 
   // Init a Pebble window.
-  window_init(&g_window, "Pine Point");
-  window_stack_push(&g_window, true);
-  window_set_background_color(&g_window, COLOR_BACKGROUND);
+  window = window_create();
+  window_stack_push(window, true);
+  window_set_background_color(window, COLOR_BACKGROUND);
 
   // Create the layer for the grid of blocks.
-  layer_init(&g_layer_grid, g_window.layer.frame);
-  g_layer_grid.update_proc = &grid_layer_update_callback;
-  layer_add_child(&g_window.layer, &g_layer_grid);
+  layer_grid = layer_create(layer_get_frame(window_get_root_layer(window)));
+  layer_set_update_proc(layer_grid, grid_layer_update_callback);
+  layer_add_child(window_get_root_layer(window), layer_grid);
 
-  // Create the later for the time text.
-  text_layer_init(&g_layer_time, GRect(0, 128, 144, 36));
-  text_layer_set_text_color(&g_layer_time, COLOR_FOREGROUND);
-  text_layer_set_background_color(&g_layer_time, GColorClear);
-  text_layer_set_font(&g_layer_time, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
-  text_layer_set_text_alignment(&g_layer_time, GTextAlignmentCenter);
-  layer_add_child(&g_window.layer, &g_layer_time.layer);
+  // Create the layer for the time text.
+  layer_time = clock_layer_create(GRect(0, 128, 144, 36));
+  clock_layer_add_to_window(layer_time, window);
+  clock_layer_set_text_color(layer_time, COLOR_FOREGROUND);
+  clock_layer_set_background_color(layer_time, GColorClear);
+  clock_layer_set_font(layer_time, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
+  clock_layer_set_text_alignment(layer_time, GTextAlignmentCenter);
+  clock_layer_set_time_format(layer_time, "%l:%M %p");
+  clock_layer_update(layer_time);
 
-  // Draw the screen.
-  draw(get_current_time());
+  tick_timer_service_subscribe(MINUTE_UNIT, handle_minute_tick);
 }
 
-/**
- * Pebble app entry point
- */
-void pbl_main(void *params) {
-
-  PebbleAppHandlers handlers = {
-    .init_handler = &handle_init,
-    .tick_info = {
-      .tick_handler = &handle_minute_tick,
-      .tick_units = MINUTE_UNIT
-    }
-  };
-
-  app_event_loop(params, &handlers);
-
+void handle_deinit() {
+  tick_timer_service_unsubscribe();
+  window_destroy(window);
+  layer_destroy(layer_grid);
+  clock_layer_destroy(layer_time);
 }
