@@ -10,12 +10,10 @@
  * GitHub Repository: https://github.com/matthewtole/pebble-pinepoint/
 */
 
-#include <pebble_os.h>
-#include <pebble_app.h>
-#include <pebble_fonts.h>
+#include <pebble.h>
 
-#include "pebble-assist.h"
-#include "clock-layer.h"
+#include "libs/pebble-assist.h"
+#include "libs/clock-layer.h"
 
 // Commented out because inverted colours is gross.
 #define INVERT_COLORS false
