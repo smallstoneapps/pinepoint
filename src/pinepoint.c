@@ -3,6 +3,7 @@
  *
  * Written by Matthew Tole <pebble@matthewtole.com>
  * Started 4th July 2013
+ * Last modified 10th May 2014
  *
  * Developed for Rush Hambleton at Pine Point School
  * Original proposal document: http://dft.ba/-pinepointproposal
@@ -231,13 +232,12 @@ void handle_init() {
 
   // Init a Pebble window.
   window = window_create();
-  window_stack_push(window, true);
   window_set_background_color(window, COLOR_BACKGROUND);
 
   // Create the layer for the grid of blocks.
-  layer_grid = layer_create(layer_get_frame(window_get_root_layer(window)));
+  layer_grid = layer_create_fullscreen(window);
   layer_set_update_proc(layer_grid, grid_layer_update_callback);
-  layer_add_child(window_get_root_layer(window), layer_grid);
+  layer_add_to_window(layer_grid, window);
 
   // Create the layer for the time text.
   layer_time = clock_layer_create(GRect(0, 128, 144, 36));
@@ -250,6 +250,9 @@ void handle_init() {
   clock_layer_update(layer_time);
 
   tick_timer_service_subscribe(MINUTE_UNIT, handle_minute_tick);
+
+  window_stack_push(window, true);
+
 }
 
 void handle_deinit() {

@@ -9,6 +9,7 @@
 struct ClockLayer {
   TextLayer* text_layer;
   char* format;
+  char str[20];
 };
 
 ClockLayer* clock_layer_create(GRect frame) {
@@ -17,7 +18,8 @@ ClockLayer* clock_layer_create(GRect frame) {
   text_layer_set_text_alignment(clock_layer->text_layer, GTextAlignmentCenter);
   text_layer_set_text_color(clock_layer->text_layer, GColorBlack);
   text_layer_set_background_color(clock_layer->text_layer, GColorClear);
-  clock_layer->format = "%H:%M";
+  clock_layer->format = malloc(sizeof(char) * 6);
+  strncpy(clock_layer->format, "%H:%M", 5);
   return clock_layer;
 }
 
@@ -48,8 +50,6 @@ void clock_layer_update(ClockLayer* clock_layer) {
 }
 
 void clock_layer_set_time(ClockLayer* clock_layer, struct tm* current_time) {
-  static char time_str[32];
-
-  strftime(time_str, sizeof(time_str), clock_layer->format, current_time);
-  text_layer_set_text(clock_layer->text_layer, time_str);
+  strftime(clock_layer->str, sizeof(clock_layer->str), clock_layer->format, current_time);
+  text_layer_set_text(clock_layer->text_layer, clock_layer->str);
 }
