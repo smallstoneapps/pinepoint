@@ -14,7 +14,7 @@
 #include <pebble.h>
 
 #include "libs/pebble-assist/pebble-assist.h"
-#include "libs/clock-layer.h"
+#include "libs/clock-layer/clock-layer.h"
 
 // Commented out because inverted colours is gross.
 #define INVERT_COLORS false
