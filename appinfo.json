@@ -3,8 +3,7 @@
   "shortName": "Pine Point",
   "longName": "Pine Point",
   "companyName": "Matthew Tole",
-  "versionCode": 3,
-  "versionLabel": "2.0.1",
+  "versionLabel": "2.2",
   "watchapp": {
     "watchface": true
   },

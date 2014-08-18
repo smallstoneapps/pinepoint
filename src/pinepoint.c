@@ -3,7 +3,7 @@
  *
  * Written by Matthew Tole <pebble@matthewtole.com>
  * Started 4th July 2013
- * Last modified 10th May 2014
+ * Last modified 18th August 2014
  *
  * Developed for Rush Hambleton at Pine Point School
  * Original proposal document: http://dft.ba/-pinepointproposal
@@ -51,12 +51,12 @@ static void handle_init(void);
 static void handle_deinit(void);
 
 const int CLASS_ENDINGS[] = {
-  572, // 09:32
-  623, // 10:23
-  678, // 11:18
+  570, // 09:30
+  620, // 10:20
+  675, // 11:15
   725, // 12:05
-  812, // 13:32
-  859, // 14:19
+  810, // 13:30
+  855, // 14:15
   905  // 15:05
 };
 
